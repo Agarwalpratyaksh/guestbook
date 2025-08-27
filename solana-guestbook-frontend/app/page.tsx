@@ -1,3 +1,4 @@
+"use client"
 import AppBar from "./components/AppBar";
 import Guestbook from "./components/Guestbook";
 
