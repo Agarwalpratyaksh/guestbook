@@ -4,8 +4,19 @@ import React, { FC, useMemo, ReactNode } from 'react';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { UnsafeBurnerWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { clusterApiUrl } from '@solana/web3.js';
+
+// ✨ STEP 1: Import all the wallet adapters you want to support
+import {
+    CoinbaseWalletAdapter,
+    LedgerWalletAdapter,
+    PhantomWalletAdapter,
+    SolflareWalletAdapter,
+    TorusWalletAdapter,
+    TrustWalletAdapter,
+} from '@solana/wallet-adapter-wallets';
+import { BackpackWalletAdapter } from '@solana/wallet-adapter-backpack';
+
 
 import '@solana/wallet-adapter-react-ui/styles.css';
 
@@ -14,18 +25,20 @@ type Props = {
 };
 
 const WalletContextProvider: FC<Props> = ({ children }) => {
-    // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
     const network = WalletAdapterNetwork.Devnet;
-
-    // You can also provide a custom RPC endpoint.
     const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
     const wallets = useMemo(
         () => [
-            new UnsafeBurnerWalletAdapter(),
-            // Add other wallets here
+            // ✨ STEP 2: Add all the wallet instances to the array
+            new BackpackWalletAdapter(),
+            new CoinbaseWalletAdapter(),
+            new LedgerWalletAdapter(),
+            new PhantomWalletAdapter(),
+            new SolflareWalletAdapter({ network }),
+            new TorusWalletAdapter(),
+            new TrustWalletAdapter(),
         ],
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [network]
     );
 

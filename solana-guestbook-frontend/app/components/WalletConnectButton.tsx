@@ -9,10 +9,10 @@ const WalletMultiButtonDynamic = dynamic(
     { ssr: false }
 );
 
-const WalletConnectButton = () => {
+const WalletConnectButtonCustom = () => {
     return (
         <WalletMultiButtonDynamic style={{ backgroundColor: '#512da8' }} />
     );
 };
 
-export default WalletConnectButton;
+export default WalletConnectButtonCustom;
