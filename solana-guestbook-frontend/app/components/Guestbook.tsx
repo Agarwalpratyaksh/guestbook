@@ -1,9 +1,10 @@
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState, useEffect } from 'react';
 import * as anchor from '@coral-xyz/anchor';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
-import { Program, Idl } from '@coral-xyz/anchor';
+import { Program } from '@coral-xyz/anchor';
 import { PublicKey, SystemProgram } from '@solana/web3.js';
 import toast from 'react-hot-toast'; // <-- 1. Import toast
 
@@ -53,7 +54,7 @@ export default function GuestbookPage() {
     } else {
       setMessages([]);
     }
-  }, [wallet, connection]);
+  }, [wallet, fetchMessages]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -86,9 +87,7 @@ export default function GuestbookPage() {
       const txSignature = await program.methods
         .writeMessage(message)
         .accounts({
-          messageAccount: messagePDA,
           user: wallet.publicKey,
-          systemProgram: SystemProgram.programId,
         })
         .rpc();
 
@@ -100,7 +99,7 @@ export default function GuestbookPage() {
       
       // 4. Show a custom success toast with the clickable transaction ID
       toast.success(
-        (t) => (
+        () => (
           <div className="flex flex-col items-center gap-1">
             <span>Transaction successful!</span>
             <span 
