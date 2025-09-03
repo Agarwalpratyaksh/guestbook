@@ -7,10 +7,8 @@ import { PublicKey } from '@solana/web3.js';
 import type { Guestbook as GuestbookProgram } from '../types/guestbook';
 import idl from '../idl/guestbook.json';
 
-// Your program's public key
 const programId = new PublicKey('8tf51wycCRM21mqVBWGvB1tpJ5QVcb8PtTaLuAHyMwib');
 
-// Define a more structured type for the fetched account data
 interface MessageEntry {
     publicKey: PublicKey;
     account: {
@@ -27,12 +25,10 @@ export const Guestbook = () => {
     const [message, setMessage] = useState('');
     const [messagePda, setMessagePda] = useState<PublicKey | null>(null);
 
-    // --- NEW STATE for all messages ---
     const [allMessages, setAllMessages] = useState<MessageEntry[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    // Set up the Anchor program instance
     useEffect(() => {
         if (wallet.publicKey) {
             const provider = new anchor.AnchorProvider(connection, wallet as any, {
@@ -43,7 +39,6 @@ export const Guestbook = () => {
         }
     }, [connection, wallet]);
 
-    // Find the PDA for the current user's message
     useEffect(() => {
         if (wallet.publicKey) {
             const [pda] = PublicKey.findProgramAddressSync(
@@ -54,7 +49,6 @@ export const Guestbook = () => {
         }
     }, [wallet.publicKey]);
     
-    // --- NEW FUNCTION to fetch all messages ---
     const fetchAllMessages = async () => {
         if (!program) return;
         setLoading(true);
@@ -71,7 +65,6 @@ export const Guestbook = () => {
         }
     };
 
-    // Fetch all messages when the program is initialized
     useEffect(() => {
         fetchAllMessages();
     }, [program]);
@@ -98,7 +91,6 @@ export const Guestbook = () => {
                 .rpc();
 
             setMessage(''); // Clear input field
-            // --- REFRESH the list after submitting ---
             await fetchAllMessages();
 
         } catch (err: any) {
@@ -113,7 +105,6 @@ export const Guestbook = () => {
         }
     };
 
-    // Find the current user's message from the allMessages list
     const currentUserMessage = allMessages.find(
       (msg) => msg.account.user.equals(wallet.publicKey!)
     );
@@ -135,7 +126,6 @@ export const Guestbook = () => {
 
             {error && <p className="error-message">{error}</p>}
             
-            {/* --- NEW SECTION to display all messages --- */}
             <div className="all-messages-section">
                 <h2>Guestbook Entries 🚀</h2>
                  <button onClick={fetchAllMessages} disabled={loading} className="refresh-button">
