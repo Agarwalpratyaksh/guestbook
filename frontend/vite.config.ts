@@ -6,14 +6,16 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // Add this define object
   define: {
     'process.env': {}
   },
-  // And this resolve object
+  // REPLACE your old 'resolve' object with this one
   resolve: {
-    alias: {
-      process: "process/browser",
-    },
+    alias: [
+      {
+        find: /^process\/?$/, // Match 'process' and 'process/'
+        replacement: 'process/browser',
+      },
+    ],
   },
 })
