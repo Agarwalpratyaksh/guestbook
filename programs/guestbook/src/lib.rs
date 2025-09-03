@@ -23,7 +23,7 @@ pub mod guestbook {
 #[instruction(message: String)]
 pub struct WriteMessage<'info> {
     #[account(
-        init,
+        init_if_needed,
         payer = user,
         space = 8 + 32 + 8 + 4 + 200, // discriminator + pubkey + timestamp + string prefix + max msg
         seeds = [b"message", user.key().as_ref()],
